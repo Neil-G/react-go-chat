@@ -113,6 +113,10 @@ class ChatPage extends React.Component {
 
   // activate socket communication
   _activateSocketConnection = () => {
+    this.socket.onmessage = msg => {
+      this._addMessageToThread(JSON.parse(msg.data));
+    };
+
     this.socket.onopen = () => {
       console.log("Successfully Connected");
       // send welcome message to new user from mount sinai bot
@@ -122,10 +126,6 @@ class ChatPage extends React.Component {
           Text: "welcome, " + (this.props.email || "anon user")
         })
       );
-    };
-
-    this.socket.onmessage = msg => {
-      this._addMessageToThread(JSON.parse(msg.data));
     };
 
     this.socket.onclose = event => {
